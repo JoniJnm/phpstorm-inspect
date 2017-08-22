@@ -51,7 +51,7 @@ function getOutputPrinter($format)
 }
 
 try {
-    if ($argc !== 6 && $argc !== 7) {
+    if ($argc !== 7 && $argc !== 8) {
         throw new \Exception(
             sprintf(
                 'Expected 5 or 6 arguments:\n'
@@ -60,6 +60,7 @@ try {
                 . ' <projectPath>'
                 . ' <inspectionProfileFilepath>'
                 . ' <inspectedDirectory>'
+                . ' <ideaPropertiesFilepath>'
                 . ' [<format>, accepted values: "%s" / "%s"]'
                 . "\n",
                 $argv[0], FORMAT_TEXT, FORMAT_CHECKSTYLE
@@ -72,8 +73,9 @@ try {
     $projectPath = realpathWithCheck($argv[3]);
     $inspectionProfileFilepath = realpathWithCheck($argv[4]);
     $inspectedDirectory = realpathWithCheck($argv[5]);
+    $ideaPropertiesFilepath = realpathWithCheck($argv[6]);
     $outputPath = realpathWithCheck(__DIR__ . '/../output');
-    $format = isset($argv[6]) ? $argv[6] : FORMAT_TEXT;
+    $format = isset($argv[7]) ? $argv[7] : FORMAT_TEXT;
 
     $lock = new FlockLock(sys_get_temp_dir());
     $mutex = new Mutex('phpstorm-inspect', $lock);
@@ -83,14 +85,15 @@ try {
     }
 
     $inspectionRunner = new InspectionRunner(new Filesystem());
-    $inspectionRunner->clearCache($phpstormSystemPath);
+    //$inspectionRunner->clearCache($phpstormSystemPath);
     $inspectionRunner->clearOutputDirectory($outputPath);
     $inspectionRunner->runInspection(
         $inspectShExecutableFilepath,
         $projectPath,
         $inspectionProfileFilepath,
         $outputPath,
-        $inspectedDirectory
+        $inspectedDirectory,
+        $ideaPropertiesFilepath
     );
 
     $outputPrinter = getOutputPrinter($format);

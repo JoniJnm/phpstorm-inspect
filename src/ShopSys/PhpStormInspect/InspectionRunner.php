@@ -42,16 +42,21 @@ class InspectionRunner
      * @param string $inspectionProfileFilepath
      * @param string $outputPath
      * @param string $inspectedDirectory
+     * @param string $ideaPropertiesFilepath
+     *
+     * @throws \Exception
      */
     public function runInspection(
         $inspectShExecutableFilepath,
         $projectPath,
         $inspectionProfileFilepath,
         $outputPath,
-        $inspectedDirectory
+        $inspectedDirectory,
+        $ideaPropertiesFilepath
     ) {
         $command = sprintf(
-            '%s %s %s %s -d %s 2>&1',
+            'PHPSTORM_PROPERTIES=%s %s %s %s %s -d %s 2>&1',
+            escapeshellarg($ideaPropertiesFilepath),
             escapeshellarg($inspectShExecutableFilepath),
             escapeshellarg($projectPath),
             escapeshellarg($inspectionProfileFilepath),
