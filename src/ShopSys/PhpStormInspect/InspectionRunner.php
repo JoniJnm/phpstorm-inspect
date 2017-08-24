@@ -22,7 +22,7 @@ class InspectionRunner
     public function clearCache($phpstormSystemPath)
     {
         if (is_dir($phpstormSystemPath . '/' . self::CACHE_DIR)) {
-            $this->clearDirectory($phpstormSystemPath . '/' . self::CACHE_DIR);
+            //$this->clearDirectory($phpstormSystemPath . '/' . self::CACHE_DIR);
         }
 
         if (is_dir($phpstormSystemPath . '/' . self::INDEX_DIR)) {

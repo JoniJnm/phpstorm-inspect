@@ -85,7 +85,7 @@ try {
     }
 
     $inspectionRunner = new InspectionRunner(new Filesystem());
-    //$inspectionRunner->clearCache($phpstormSystemPath);
+    $inspectionRunner->clearCache($phpstormSystemPath);
     $inspectionRunner->clearOutputDirectory($outputPath);
     $inspectionRunner->runInspection(
         $inspectShExecutableFilepath,
