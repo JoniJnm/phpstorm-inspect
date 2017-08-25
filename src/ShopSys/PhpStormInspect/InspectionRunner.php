@@ -22,7 +22,7 @@ class InspectionRunner
     public function clearCache($phpstormSystemPath)
     {
         if (is_dir($phpstormSystemPath . '/' . self::CACHE_DIR)) {
-            //$this->clearDirectory($phpstormSystemPath . '/' . self::CACHE_DIR);
+            $this->clearDirectory($phpstormSystemPath . '/' . self::CACHE_DIR);
         }
 
         if (is_dir($phpstormSystemPath . '/' . self::INDEX_DIR)) {
@@ -41,7 +41,7 @@ class InspectionRunner
      * @param string $projectPath
      * @param string $inspectionProfileFilepath
      * @param string $outputPath
-     * @param string $inspectedDirectory
+     * @param string[] $dirs
      * @param string $ideaPropertiesFilepath
      *
      * @throws \Exception
@@ -51,18 +51,23 @@ class InspectionRunner
         $projectPath,
         $inspectionProfileFilepath,
         $outputPath,
-        $inspectedDirectory,
+        $dirs,
         $ideaPropertiesFilepath
     ) {
         $command = sprintf(
-            'PHPSTORM_PROPERTIES=%s %s %s %s %s -d %s 2>&1',
+            'PHPSTORM_PROPERTIES=%s %s %s %s %s',
             escapeshellarg($ideaPropertiesFilepath),
             escapeshellarg($inspectShExecutableFilepath),
             escapeshellarg($projectPath),
             escapeshellarg($inspectionProfileFilepath),
-            escapeshellarg($outputPath),
-            escapeshellarg($inspectedDirectory)
+            escapeshellarg($outputPath)
         );
+
+        foreach ($dirs as $dir) {
+            $command .= ' -d '.escapeshellarg($dir);
+        }
+
+        $command .= ' 2>&1';
 
         $returnCode = null;
         ob_start();
