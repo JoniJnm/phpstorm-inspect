@@ -41,7 +41,6 @@ class InspectionRunner
      * @param string $projectPath
      * @param string $inspectionProfileFilepath
      * @param string $outputPath
-     * @param string[] $dirs
      * @param string $ideaPropertiesFilepath
      *
      * @throws \Exception
@@ -51,7 +50,6 @@ class InspectionRunner
         $projectPath,
         $inspectionProfileFilepath,
         $outputPath,
-        $dirs,
         $ideaPropertiesFilepath
     ) {
         $command = sprintf(
@@ -63,13 +61,10 @@ class InspectionRunner
             escapeshellarg($outputPath)
         );
 
-        foreach ($dirs as $dir) {
-            $command .= ' -d '.escapeshellarg($dir);
-        }
-
         $command .= ' 2>&1';
 
         $returnCode = null;
+        echo $command."\n";
         ob_start();
         passthru($command, $returnCode);
         $output = ob_get_clean();
