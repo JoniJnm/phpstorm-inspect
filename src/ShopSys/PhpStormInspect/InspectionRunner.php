@@ -64,7 +64,6 @@ class InspectionRunner
         $command .= ' 2>&1';
 
         $returnCode = null;
-        echo $command."\n";
         ob_start();
         passthru($command, $returnCode);
         $output = ob_get_clean();
